@@ -1,3 +1,7 @@
+def hello():
+    print('hello world')
+
+'''
 import urllib
 import json
 #https://code.google.com/p/pyql/source/browse/source/pyql.py?r=e8e1ecaa1be1e655acd679707c0d9080b779a071
@@ -18,3 +22,4 @@ u = urllib.urlopen(url)
 #data = u.read()
 data = json.loads(u.read())
 print(data)
+'''

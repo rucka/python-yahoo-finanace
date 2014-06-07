@@ -1,0 +1,3 @@
+import yahoo
+
+yahoo.hello()
