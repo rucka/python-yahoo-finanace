@@ -1,25 +1,31 @@
-def hello():
-    print('hello world')
-
-'''
 import urllib
 import json
-#https://code.google.com/p/pyql/source/browse/source/pyql.py?r=e8e1ecaa1be1e655acd679707c0d9080b779a071
-#https://github.com/gurch101/StockScraper/blob/master/stockretriever.py
-print('downloading data..')
+from xml.dom import minidom
 
-url = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.industry%20where%20id%20in%20(select%20industry.id%20from%20yahoo.finance.sectors)'#&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys'
-urlbase = 'http://query.yahooapis.com/v1/public/yql?format=json&q={0}&env=store://datatables.org/alltableswithkeys'
-query = 'select * from yahoo.finance.industry where id in (select industry.id from yahoo.finance.sectors)'
-url = urlbase.format(query) 
-print (url)
-u = urllib.urlopen(url)
+urlbase = 'http://query.yahooapis.com/v1/public/yql?format={0}&q={1}&env=store://datatables.org/alltableswithkeys'
 
+def getAllSymbols():
+    #print('downloading data..')
 
+    format = 'xml'
+    query = 'select * from yahoo.finance.industry where id in (select industry.id from yahoo.finance.sectors)'
+    url = urlbase.format(format, query) 
+    #print (url)
+    usock = urllib.urlopen(url)
+    dataAsString = usock.read()
+    dom = minidom.parseString(dataAsString)
+    industries = dom.getElementsByTagName('industry')    
+    for industry in industries:
+        industryValue = industry.attributes['name'].value
 
+        for company in industry.getElementsByTagName('company'):
+            companyValue = company.attributes['name'].value
+            symbolValue = company.attributes['symbol'].value
+            marketValue = __getMarket(symbolValue)
+            yield {'symbol': symbolValue,'market':marketValue, 'company': companyValue,'industry':industryValue}
 
-
-#data = u.read()
-data = json.loads(u.read())
-print(data)
-'''
+def __getMarket(symbol):
+    if not symbol[-3:-2] == '.':
+        return ''
+    else:
+        return symbol[-2:] 
