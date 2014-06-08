@@ -1,6 +1,6 @@
 python-yahoo-finanace
 =====================
-for each symbols retrived from yahoo, a csv with historical data will be downloaded.
+for each symbols retrived from yahoo finance service, a csv with historical data will be saved into your disk.
 
 ## Instructions
 - clone this repository
